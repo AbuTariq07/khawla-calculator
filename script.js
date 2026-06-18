@@ -21,38 +21,47 @@ function calculatePrice() {
     const widthPlus = width + 10;
     const heightPlus = height + 10;
 
-    let selectedRoll = null;
-    let lengthForPrice = null;
+    let bestOption = null;
 
     for (const roll of rolls) {
-        const options = [];
-
         if (widthPlus <= roll) {
-            options.push({
+            const option = {
+                roll: roll,
                 waste: roll - widthPlus,
-                length: heightPlus
-            });
+                lengthForPrice: heightPlus
+            };
+
+            if (
+                bestOption === null ||
+                option.waste < bestOption.waste
+            ) {
+                bestOption = option;
+            }
         }
 
         if (heightPlus <= roll) {
-            options.push({
+            const option = {
+                roll: roll,
                 waste: roll - heightPlus,
-                length: widthPlus
-            });
-        }
+                lengthForPrice: widthPlus
+            };
 
-        if (options.length > 0) {
-            options.sort((a, b) => a.waste - b.waste);
-            selectedRoll = roll;
-            lengthForPrice = options[0].length;
-            break;
+            if (
+                bestOption === null ||
+                option.waste < bestOption.waste
+            ) {
+                bestOption = option;
+            }
         }
     }
 
-    if (selectedRoll === null) {
+    if (bestOption === null) {
         alert("لا يوجد رول مناسب لهذا المقاس");
         return;
     }
+
+    const selectedRoll = bestOption.roll;
+    const lengthForPrice = bestOption.lengthForPrice;
 
     const canvasPrice =
         (selectedRoll / 100) *
@@ -65,7 +74,9 @@ function calculatePrice() {
         const frameWidth = (width + 5) / 100;
         const frameHeight = (height + 5) / 100;
 
-        framePrice = ((frameWidth * 2) + (frameHeight * 2)) * framePricePerMeter;
+        framePrice =
+            ((frameWidth * 2) + (frameHeight * 2)) *
+            framePricePerMeter;
     }
 
     const total = canvasPrice + framePrice;
