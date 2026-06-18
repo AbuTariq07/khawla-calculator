@@ -22,7 +22,7 @@ function calculatePrice() {
     let widthPlus = width + 10;
     let heightPlus = height + 10;
 
-    let selectedRoll = null;
+   let selectedRoll = null;
 let lengthForPrice = null;
 
 for (let roll of rolls) {
