@@ -4,6 +4,7 @@ const framePricePerMeter = 45;
 const deliveryPrice = 29;
 
 function calculatePrice() {
+
     let width = parseFloat(document.getElementById("width").value);
     let height = parseFloat(document.getElementById("height").value);
     let hasFrame = document.getElementById("frame").checked;
@@ -25,31 +26,36 @@ function calculatePrice() {
     let lengthForPrice = null;
 
     for (let roll of rolls) {
-        let validOptions = [];
+
+        let options = [];
 
         if (widthPlus <= roll) {
-            validOptions.push({
+            options.push({
                 waste: roll - widthPlus,
                 length: heightPlus
             });
         }
 
         if (heightPlus <= roll) {
-            validOptions.push({
+            options.push({
                 waste: roll - heightPlus,
                 length: widthPlus
             });
         }
 
-        if (validOptions.length > 0) {
+        if (options.length > 0) {
+
             selectedRoll = roll;
-            validOptions.sort((a, b) => a.waste - b.waste);
-            lengthForPrice = validOptions[0].length;
+
+            options.sort((a, b) => a.waste - b.waste);
+
+            lengthForPrice = options[0].length;
+
             break;
         }
     }
 
-    if (!selectedRoll) {
+    if (selectedRoll === null) {
         alert("لا يوجد رول مناسب لهذا المقاس");
         return;
     }
@@ -62,16 +68,19 @@ function calculatePrice() {
     let framePrice = 0;
 
     if (hasFrame) {
+
         let frameWidth = (width + 5) / 100;
         let frameHeight = (height + 5) / 100;
 
         framePrice =
-            ((frameWidth * 2) + (frameHeight * 2)) *
-            framePricePerMeter;
+            ((frameWidth * 2) + (frameHeight * 2))
+            * framePricePerMeter;
     }
 
     let total = canvasPrice + framePrice;
+
     let roundedPrice = Math.ceil(total);
+
     let firstTotal = roundedPrice + deliveryPrice;
 
     document.getElementById("roll").innerText =
@@ -86,30 +95,25 @@ function calculatePrice() {
     document.getElementById("totalPrice").innerText =
         `الإجمالي : ${total.toFixed(2)} ريال`;
 
-    let frameText = hasFrame ? "مع إطار" : "بدون إطار";
+    let frameText =
+        hasFrame ? "مع إطار" : "بدون إطار";
 
     let whatsappMessage =
-        `لوحة مقاس ${width:g} سم × ${height:g} سم ${frameText} : ${roundedPrice} ريال\n\n` +
+        `لوحة مقاس ${width} سم × ${height} سم ${frameText} : ${roundedPrice} ريال\n\n` +
         `التوصيل : ${deliveryPrice} ريال\n\n` +
         `الإجمالي : ${firstTotal} ريال\n\n\n` +
         `بعد الخصم :\n\n` +
         `التوصيل : مجاني\n\n` +
         `الإجمالي : `;
 
-    // تصحيح تنسيق الأرقام في JavaScript
-    whatsappMessage = whatsappMessage
-        .replace(`${width:g}`, formatNumber(width))
-        .replace(`${height:g}`, formatNumber(height));
-
-    document.getElementById("messagePreview").value = whatsappMessage;
-}
-
-function formatNumber(number) {
-    return Number.isInteger(number) ? number.toString() : number.toString();
+    document.getElementById("messagePreview").value =
+        whatsappMessage;
 }
 
 function copyMessage() {
-    const text = document.getElementById("messagePreview").value;
+
+    const text =
+        document.getElementById("messagePreview").value;
 
     if (!text.trim()) {
         alert("احسب السعر أولاً");
@@ -117,5 +121,6 @@ function copyMessage() {
     }
 
     navigator.clipboard.writeText(text);
+
     alert("تم نسخ رسالة الواتساب");
 }
