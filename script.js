@@ -129,16 +129,16 @@ function calculatePrice() {
         `سعر الإطار : ${framePrice.toFixed(2)} ريال`;
 
     document.getElementById("totalPrice").innerText =
-        `الإجمالي : ${total.toFixed(2)} ريال`;
+        `الإجمالي بعد الخصم : ${roundedAfterDiscount} ريال`;
 
     const frameText = hasFrame ? "مع إطار" : "بدون إطار";
 
     const whatsappMessage =
-        `لوحة مقاس ${formatNumber(width)} سم × ${formatNumber(height)} سم ${frameText} : ${roundedPrice} ريال\n\n` +
-        `التوصيل : ${deliveryPrice} ريال\n\n` +
-        `الإجمالي : ${firstTotal} ريال\n\n\n` +
-        `بعد الخصم : ${roundedAfterDiscount} ريال\n\n` +
-        `التوصيل : مجاني\n\n` +
+        `لوحة مقاس ${formatNumber(width)} سم × ${formatNumber(height)} سم ${frameText} : ${roundedPrice} ريال\n` +
+        `التوصيل : ${deliveryPrice} ريال\n` +
+        `الإجمالي : ${firstTotal} ريال\n\n` +
+        `بعد الخصم : ${roundedAfterDiscount} ريال\n` +
+        `التوصيل : مجاني\n` +
         `الإجمالي : ${roundedAfterDiscount} ريال`;
 
     document.getElementById("messagePreview").value = whatsappMessage;
