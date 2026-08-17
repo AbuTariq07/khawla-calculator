@@ -127,6 +127,9 @@ function calculatePrice() {
 
     document.getElementById("framePrice").innerText =
         `سعر الإطار : ${framePrice.toFixed(2)} ريال`;
+   
+    document.getElementById("firstTotal").innerText =
+        `الإجمالي قبل الخصم : ${roundedAfterDiscount} ريال`;
 
     document.getElementById("totalPrice").innerText =
         `الإجمالي بعد الخصم : ${roundedAfterDiscount} ريال`;
