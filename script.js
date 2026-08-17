@@ -28,9 +28,14 @@ function calculatePrice() {
     const height = parseFloat(document.getElementById("height").value);
     const hasFrame = document.getElementById("frame").checked;
 
-    const canvasPricePerMeter = parseFloat(document.getElementById("meterPrice").value) || 250;
-    const discount1 = parseFloat(document.getElementById("discount1").value) || 0;
-    const discount2 = parseFloat(document.getElementById("discount2").value) || 0;
+    const canvasPricePerMeter =
+        parseFloat(document.getElementById("meterPrice").value) || 250;
+
+    const discount1 =
+        parseFloat(document.getElementById("discount1").value) || 0;
+
+    const discount2 =
+        parseFloat(document.getElementById("discount2").value) || 0;
 
     if (isNaN(width) || isNaN(height)) {
         alert("يرجى إدخال المقاسات");
@@ -38,20 +43,36 @@ function calculatePrice() {
     }
 
     const sizeKey = getSizeKey(width, height);
+
     let canvasPrice = 0;
     let framePrice = 0;
     let selectedRoll = "-";
 
-    if (fixedPrices[sizeKey]) {
-        const fixed = fixedPrices[sizeKey];
-        const fixedTotal = hasFrame ? fixed.withFrame : fixed.withoutFrame;
+    // =========================
+    // الأسعار الثابتة
+    // =========================
 
-        canvasPrice = hasFrame ? fixed.withFrame : fixed.withoutFrame;
+    if (fixedPrices[sizeKey]) {
+
+        const fixed = fixedPrices[sizeKey];
+
+        canvasPrice = hasFrame
+            ? fixed.withFrame
+            : fixed.withoutFrame;
+
         framePrice = 0;
         selectedRoll = "سعر ثابت";
+
     } else {
+
+        // =========================
+        // المقاسات المخصصة
+        // =========================
+
         if (width > 140 && height > 140) {
-            alert("المقاس غير مقبول - يجب أن يكون أحد البعدين أقل من أو يساوي 140 سم");
+            alert(
+                "المقاس غير مقبول - يجب أن يكون أحد البعدين أقل من أو يساوي 140 سم"
+            );
             return;
         }
 
@@ -61,26 +82,35 @@ function calculatePrice() {
         let bestOption = null;
 
         for (const roll of rolls) {
+
             if (widthPlus <= roll) {
+
                 const option = {
                     roll: roll,
                     waste: roll - widthPlus,
                     lengthForPrice: heightPlus
                 };
 
-                if (bestOption === null || option.waste < bestOption.waste) {
+                if (
+                    bestOption === null ||
+                    option.waste < bestOption.waste
+                ) {
                     bestOption = option;
                 }
             }
 
             if (heightPlus <= roll) {
+
                 const option = {
                     roll: roll,
                     waste: roll - heightPlus,
                     lengthForPrice: widthPlus
                 };
 
-                if (bestOption === null || option.waste < bestOption.waste) {
+                if (
+                    bestOption === null ||
+                    option.waste < bestOption.waste
+                ) {
                     bestOption = option;
                 }
             }
@@ -98,26 +128,48 @@ function calculatePrice() {
             (bestOption.lengthForPrice / 100) *
             canvasPricePerMeter;
 
+        // =========================
+        // حساب الإطار
+        // =========================
+
         if (hasFrame) {
+
             const frameWidth = (width + 5) / 100;
             const frameHeight = (height + 5) / 100;
 
             framePrice =
-                ((frameWidth * 2) + (frameHeight * 2)) *
+                (
+                    (frameWidth * 2) +
+                    (frameHeight * 2)
+                ) *
                 framePricePerMeter;
         }
     }
 
-    const total = canvasPrice + framePrice;
-    const roundedPrice = Math.ceil(total);
-    const firstTotal = roundedPrice + deliveryPrice;
+    // =========================
+    // الحسابات
+    // =========================
 
+    const total = canvasPrice + framePrice;
+
+    const roundedPrice = Math.ceil(total);
+
+    // السعر + التوصيل قبل الخصم
+    const firstTotal =
+        roundedPrice + deliveryPrice;
+
+    // الخصومات
     const afterDiscount =
         roundedPrice *
         (1 - discount1 / 100) *
         (1 - discount2 / 100);
 
-    const roundedAfterDiscount = Math.ceil(afterDiscount);
+    const roundedAfterDiscount =
+        Math.ceil(afterDiscount);
+
+    // =========================
+    // لوحة النتائج
+    // =========================
 
     document.getElementById("roll").innerText =
         `الرول المختار : ${selectedRoll} سم`;
@@ -127,32 +179,65 @@ function calculatePrice() {
 
     document.getElementById("framePrice").innerText =
         `سعر الإطار : ${framePrice.toFixed(2)} ريال`;
-   
-    document.getElementById("firstTotal").innerText =
+
+    // إضافة السعر قبل الخصم للوحة النتائج فقط
+    let firstTotalElement =
+        document.getElementById("firstTotal");
+
+    // لو العنصر غير موجود في HTML، أنشئه تلقائيًا
+    if (!firstTotalElement) {
+
+        firstTotalElement =
+            document.createElement("p");
+
+        firstTotalElement.id =
+            "firstTotal";
+
+        const totalPriceElement =
+            document.getElementById("totalPrice");
+
+        totalPriceElement.parentNode.insertBefore(
+            firstTotalElement,
+            totalPriceElement
+        );
+    }
+
+    firstTotalElement.innerText =
         `الإجمالي قبل الخصم : ${firstTotal} ريال`;
 
     document.getElementById("totalPrice").innerText =
         `الإجمالي بعد الخصم : ${roundedAfterDiscount} ريال`;
 
-    const frameText = hasFrame ? "مع إطار" : "بدون إطار";
+    // =========================
+    // رسالة الواتساب
+    // لم يتم تغييرها
+    // =========================
+
+    const frameText =
+        hasFrame ? "مع إطار" : "بدون إطار";
 
     const whatsappMessage =
         `لوحة مقاس ${formatNumber(width)} سم × ${formatNumber(height)} سم ${frameText} : ${roundedPrice} ريال\n` +
         `التوصيل : ${deliveryPrice} ريال\n` +
         `الإجمالي : ${firstTotal} ريال\n\n` +
-        `بعد الخصم : ${roundedAfterDiscount} ريال\n` +
+        `بعد الخصم 
         `التوصيل : مجاني\n` +
         `الإجمالي : ${roundedAfterDiscount} ريال`;
 
-    document.getElementById("messagePreview").value = whatsappMessage;
+    document.getElementById("messagePreview").value =
+        whatsappMessage;
 }
 
 function formatNumber(number) {
-    return Number.isInteger(number) ? String(number) : String(number);
+    return Number.isInteger(number)
+        ? String(number)
+        : String(number);
 }
 
 function copyMessage() {
-    const text = document.getElementById("messagePreview").value;
+
+    const text =
+        document.getElementById("messagePreview").value;
 
     if (!text.trim()) {
         alert("احسب السعر أولاً");
@@ -160,5 +245,6 @@ function copyMessage() {
     }
 
     navigator.clipboard.writeText(text);
+
     alert("تم نسخ رسالة الواتساب");
 }
