@@ -1,6 +1,6 @@
 const rolls = [107, 127, 137, 152];
 
-const framePricePerMeter = 45;
+const framePricePerMeter = 49.5;
 
 const deliveryPrice = 29;
 
@@ -8,63 +8,68 @@ const deliveryPrice = 29;
 const fixedPrices = {
 
     "40x60": {
-        withoutFrame: 130,
-        withFrame: 229
+        withoutFrame: 143,
+        withFrame: 251.9
     },
 
     "60x90": {
-        withoutFrame: 180,
-        withFrame: 324
+        withoutFrame: 198,
+        withFrame: 356.4
     },
 
     "80x120": {
-        withoutFrame: 280,
-        withFrame: 470
+        withoutFrame: 308,
+        withFrame: 517
     },
 
     "90x140": {
-        withoutFrame: 350,
-        withFrame: 566
+        withoutFrame: 385,
+        withFrame: 622.6
     },
 
     "60x60": {
-        withoutFrame: 150,
-        withFrame: 267
+        withoutFrame: 165,
+        withFrame: 293.7
     },
 
     "90x90": {
-        withoutFrame: 250,
-        withFrame: 421
+        withoutFrame: 275,
+        withFrame: 463.1
     },
 
     "110x110": {
-        withoutFrame: 350,
-        withFrame: 557
+        withoutFrame: 385,
+        withFrame: 612.7
     },
 
     "140x140": {
-        withoutFrame: 550,
-        withFrame: 751
+        withoutFrame: 605,
+        withFrame: 826.1
     },
 
     "45x90": {
-        withoutFrame: 180,
-        withFrame: 311
+        withoutFrame: 198,
+        withFrame: 342.1
     },
 
     "60x120": {
-        withoutFrame: 250,
-        withFrame: 421
+        withoutFrame: 275,
+        withFrame: 463.1
     },
 
     "70x140": {
-        withoutFrame: 330,
-        withFrame: 528
+        withoutFrame: 363,
+        withFrame: 580.8
     },
 
     "90x180": {
-        withoutFrame: 479,
-        withFrame: 731
+        withoutFrame: 526.9,
+        withFrame: 804.1
+    },
+    
+    "120x180": {
+        withoutFrame: 715,
+        withFrame: 1023
     }
 
 };
