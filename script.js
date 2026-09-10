@@ -122,7 +122,7 @@ function calculatePrice() {
     const canvasPricePerMeter =
         parseFloat(
             document.getElementById("meterPrice").value
-        ) || 250;
+        ) || 275;
 
 
     const discount1 =
